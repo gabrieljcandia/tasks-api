@@ -1,5 +1,5 @@
 import express from 'express';
-import FirstController from './controllers/FirstController';
+import TaskController from './controllers/TaskController';
 import {handleErrors} from "./middlewares/errors/handleErrors";
 
 export const start = () => {
@@ -7,7 +7,9 @@ export const start = () => {
 
     app.use(express.json());
 
-    app.get('/', FirstController.getOne);
+    app.get('/tasks', TaskController.getByAmount);
+
+    app.put('/tasks', TaskController.editOne);
 
     app.use(handleErrors);
 
