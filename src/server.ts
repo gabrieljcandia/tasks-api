@@ -1,10 +1,11 @@
 import express from 'express';
+const cors = require('cors')
 import TaskController from './controllers/TaskController';
 import {handleErrors} from "./middlewares/errors/handleErrors";
 
 export const start = () => {
     const app = express();
-
+    app.use(cors());
     app.use(express.json());
 
     app.get('/tasks', TaskController.getByAmount);
