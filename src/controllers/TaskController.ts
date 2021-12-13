@@ -2,27 +2,46 @@ import {NextFunction, Request, Response} from "express";
 import {getTitles} from "../services/loremApi";
 import {v4 as uuidv4} from 'uuid';
 import {GetTasks, EditTask} from "../types/requests/TaskRequests";
-import {StatusCodes} from "http-status-codes";
+import {Task} from "../models/Task";
 const logger = require('../utils/logger');
 
 const getByAmount = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const getTasks: GetTasks = req.query as any;
+        const getTasks: GetTasks = parseGetTasks(req.query);
         const quantity = getTasks.quantity;
 
-        const lorems: any = await getTitles({quantity});
-        const response = lorems.map((lorem: string) => {
-            return {
-                uuid: uuidv4(),
-                title: lorem,
-                completed: false
-            }
-        })
+        const storedTasks = await Task.count();
+        if(storedTasks < quantity){
+            const tasksMissing = quantity - storedTasks;
+            await addNewTasks(tasksMissing);
+        }
 
-        res.json(response)
+        const response = await Task.findAll({
+            limit: quantity,
+            order: [['id', 'ASC']]
+        });
+
+        res.json(response);
     } catch(e){
         next();
     }
+}
+
+const addNewTasks = async (quantity: number) => {
+    const lorems: any = await getTitles({quantity});
+    const updatePromises = lorems.map(async (lorem: any) => {
+        return await Task.create({
+            uuid: uuidv4(),
+            title: lorem,
+            completed: false
+        })
+    });
+    return Promise.all(updatePromises);
+}
+
+const parseGetTasks = (query: any): GetTasks => {
+    const quantity = parseInt(query.quantity);
+    return {quantity};
 }
 
 const editOne = async(req: Request, res: Response, next: NextFunction) => {
