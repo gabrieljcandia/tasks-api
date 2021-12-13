@@ -8,4 +8,4 @@ RUN npm run build
 
 # Setup environment
 EXPOSE 4000
-CMD [ "node", "build/index.js" ]
+CMD [ "sh", "-c", "npm run migrate && node build/index.js" ]

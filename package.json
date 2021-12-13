@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "migrate": "node_modules/.bin/sequelize db:migrate",
     "build": "rimraf ./build && tsc",
     "prod": "npm run build && node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
