@@ -48,7 +48,12 @@ const editOne = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const editTask: EditTask = req.body;
         logger.info(JSON.stringify(editTask));
-        res.sendStatus(StatusCodes.OK);
+        await Task.update({...editTask}, {
+            where: {
+                uuid: editTask.uuid
+            }
+        });
+        res.json(editTask);
     } catch(e){
         next();
     }
