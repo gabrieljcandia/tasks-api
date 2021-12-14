@@ -1,5 +1,5 @@
 import express from 'express';
-const cors = require('cors')
+import cors from 'cors';
 import TaskController from './controllers/TaskController';
 import {handleErrors} from "./middlewares/errors/handleErrors";
 

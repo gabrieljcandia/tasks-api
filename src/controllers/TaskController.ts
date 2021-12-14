@@ -3,7 +3,7 @@ import {getTitles} from "../services/loremApi";
 import {v4 as uuidv4} from 'uuid';
 import {GetTasks, EditTask} from "../types/requests/TaskRequests";
 import {Task} from "../models/Task";
-const logger = require('../utils/logger');
+import {logger} from '../utils/logger';
 
 const getByAmount = async(req: Request, res: Response, next: NextFunction) => {
     try{
@@ -28,8 +28,8 @@ const getByAmount = async(req: Request, res: Response, next: NextFunction) => {
 }
 
 const addNewTasks = async (quantity: number) => {
-    const lorems: any = await getTitles({quantity});
-    const updatePromises = lorems.map(async (lorem: any) => {
+    const lorems: string[] = await getTitles({quantity});
+    const updatePromises = lorems.map(async (lorem) => {
         return await Task.create({
             uuid: uuidv4(),
             title: lorem,

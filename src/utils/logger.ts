@@ -1,12 +1,12 @@
-const winston = require('winston');
+import winston, {Logger} from 'winston';
 const {combine, timestamp, printf} = winston.format;
 
-const logFormat = printf(({level, message, timestamp}: {level: string, message: string, timestamp: string}) => {
+const logFormat = printf(({level, message, timestamp}) => {
     return `${timestamp} ${level}: ${message}`;
 });
 
 
-const logger = winston.createLogger({
+export const logger: Logger = winston.createLogger({
     level: 'info',
     format: combine(
         timestamp(),
@@ -19,5 +19,3 @@ const logger = winston.createLogger({
         new winston.transports.File({filename: 'logs/info.log' }),
     ],
 });
-
-module.exports = logger;

@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 let loremApiConfig = axios.create({
     baseURL: process.env.LOREM_FAKER_API_BASE_URL
